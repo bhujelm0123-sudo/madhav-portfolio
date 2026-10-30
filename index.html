@@ -1255,6 +1255,20 @@
                 target="_blank"
                 rel="noopener noreferrer"
               >LinkedIn ↗</a>
+              <a
+                class="btn btn-outline"
+                data-facebook-link
+                hidden
+                target="_blank"
+                rel="noopener noreferrer"
+              >Facebook ↗</a>
+              <a
+                class="btn btn-outline"
+                data-instagram-link
+                hidden
+                target="_blank"
+                rel="noopener noreferrer"
+              >Instagram ↗</a>
             </div>
 
             <p class="copy-status" id="copy-status" role="status"></p>
@@ -1287,13 +1301,9 @@
       // cv: "assets/Madhav-Bhujel-CV.pdf",
       cv: "",
 
-      // Paste your full LinkedIn profile URL here.
-      // The LinkedIn button stays hidden if blank.
-      linkedin: "https://www.linkedin.com/in/madhav-bhujel"
-
-            // Paste your full LinkedIn profile URL here.
-      // The LinkedIn button stays hidden if blank.
-      Facebook: "https://www.facebook.com/madhav.bhujel.2053"
+      linkedin: "https://www.linkedin.com/in/madhav-bhujel",
+      facebook: "https://www.facebook.com/madhav.bhujel.2053"
+      Instagram: "https://www.instagram.com/madhav.bhujel.902/"
     };
 
     /* Current year */
@@ -1323,20 +1333,13 @@
       }
     });
 
-    /* Optional LinkedIn link */
-    document.querySelectorAll("[data-linkedin-link]").forEach((link) => {
-      if (SITE.linkedin.trim()) {
-        try {
-          const url = new URL(SITE.linkedin);
-          if (url.protocol === "https:") {
-            link.href = url.href;
-            link.hidden = false;
-          }
-        } catch (error) {
-          /* Invalid links remain hidden. */
-        }
+    for (const network of ["linkedin", "facebook"]) {
+      const link = document.querySelector(`[data-${network}-link]`);
+      if (link && SITE[network]) {
+        link.href = SITE[network];
+        link.hidden = false;
       }
-    });
+    }
 
     /* Mobile menu */
     const menuButton = document.getElementById("menu-toggle");
