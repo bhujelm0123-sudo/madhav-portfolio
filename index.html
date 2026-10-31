@@ -307,6 +307,43 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
 @media(max-width:380px){#mb-snap-dial .tk-list{grid-template-columns:1fr}#mb-snap-dial .tk-node{width:42px;height:46px}#mb-snap-dial .tk-node .tk-short{font-size:9px}}
 
 </style>
+<style>
+/* Date-connected experience timeline */
+#experience .timeline-card>p:last-of-type{color:var(--muted);font-size:13px;margin-bottom:0}
+#experience .timeline{padding-left:112px}
+#experience .timeline::before{display:none}
+#experience .timeline-item{margin-bottom:24px}
+#experience .timeline-item::before{left:-21px;width:21px;background:var(--line)}
+#experience .timeline-marker{left:-55px;background:var(--bg);color:var(--gold);border-color:var(--line)}
+#experience .timeline-marker::after{display:none}
+#experience .experience-dates{position:absolute;left:-112px;top:25px;bottom:0;width:44px;display:flex;flex-direction:column;justify-content:space-between;text-align:right;font-size:11px;line-height:1.35;color:var(--muted);font-variant-numeric:tabular-nums;transition:color .2s}
+#experience .experience-range{position:absolute;left:-38px;top:35px;bottom:5px;width:2px;background:var(--line);transition:background .2s,box-shadow .2s}
+#experience .experience-range::after{content:"";position:absolute;bottom:-3px;left:-3px;width:8px;height:8px;border-radius:50%;background:inherit;border:2px solid var(--bg)}
+#experience .timeline-item:not(:last-child) .experience-range::before{content:"";position:absolute;top:100%;left:0;width:2px;height:64px;background:var(--line)}
+#experience .timeline-card{position:relative;border:1px solid var(--line);box-shadow:var(--shadow);transform:none;transition:border-color .2s,box-shadow .2s}
+#experience .experience-select{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:15px;background:transparent;cursor:pointer}
+#experience .experience-select:focus-visible{outline:2px solid var(--active);outline-offset:4px}
+#experience .timeline-item.is-highlighted .timeline-card{border-color:var(--active);box-shadow:0 0 24px var(--glow)}
+#experience .timeline-item.is-highlighted .timeline-marker{border-color:var(--active);color:var(--active)}
+#experience .timeline-item.is-highlighted::before,#experience .timeline-item.is-highlighted .experience-range{background:var(--active)}
+#experience .timeline-item.is-highlighted .experience-range{box-shadow:0 0 12px var(--glow)}
+#experience .timeline-item.is-highlighted .experience-dates,#experience .timeline-item.is-highlighted .timeline-date{color:var(--active);font-weight:700}
+#experience .timeline-item.is-current.is-highlighted .timeline-marker::after{display:block}
+@media(max-width:600px){
+ #experience .timeline{padding-left:90px}
+ #experience .experience-dates{left:-90px;width:36px;font-size:11px}
+ #experience .timeline-marker{left:-43px;width:30px;height:30px;top:20px}
+ #experience .experience-range{left:-29px}
+ #experience .timeline-item::before{left:-13px;width:13px}
+ #experience .timeline-card{padding:18px 14px}
+ #experience .timeline-item h3{font-size:18px}
+}
+</style>
+<style>
+/* Keep the journey introduction beside its timeline on larger screens. */
+@media(min-width:761px){#experience .journey-introduction{position:sticky;top:100px;align-self:start}}
+@media print{#experience .journey-introduction{position:static}}
+</style>
 </head>
 
 <body>
@@ -555,29 +592,21 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
     <!-- EXPERIENCE -->
     <section class="section" id="experience" aria-labelledby="experience-title">
       <div class="container experience-layout">
-        <div>
+        <div class="journey-introduction">
           <div class="eyebrow">My professional journey</div>
-          <h2 class="section-title" id="experience-title">
-            Experience that connects the details.
-          </h2>
-          <p class="section-intro">
-            A career shaped by classroom experience, institutional
-            responsibility, and the practical demands of academic operations.
-          </p>
-
+          <h2 class="section-title" id="experience-title">Experience that connects the details.</h2>
+          <p class="section-intro">From classroom teaching to academic leadership, examination management and institutional compliance, my work has grown around the everyday needs of students, teachers and institutions.</p>
           <div class="earlier-career">
-            <p><strong>Earlier professional experience</strong></p>
-            <p>Hillside Sample Academy · 2018–2021</p>
-            <p>
-              Building on earlier teaching and leadership work
-              in educational institutions.
-            </p>
+            <p><strong>A classroom perspective. An institutional focus.</strong></p>
+            <p>Teaching shaped my understanding of learning. Leadership and examination responsibilities strengthened my approach to coordination, accurate records and dependable academic processes.</p>
+            <p>Today, I bring those experiences together through performance monitoring, documentation, reporting and quality improvement support.</p>
           </div>
         </div>
 
         <ol class="timeline" aria-label="Experience, most recent first">
-          <li class="timeline-item is-current">
-            <span class="timeline-marker" aria-hidden="true">5</span>
+          <li class="timeline-item is-current is-highlighted">
+            <div class="experience-dates" aria-hidden="true"><span>Now</span><span>Jun<br>2025</span></div><span class="experience-range" aria-hidden="true"></span>
+            <span class="timeline-marker" aria-hidden="true">6</span>
             <article class="timeline-card">
               <div class="timeline-meta"><span class="timeline-date">JUN 2025 — PRESENT</span><span class="current-status">Currently working</span></div>
             <h3>Academic Performance &amp; Compliance Officer</h3>
@@ -588,10 +617,12 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
               improvement support.
             </p>
           
+            <button type="button" class="experience-select" aria-label="Highlight Academic Performance &amp; Compliance Officer dates"></button>
             </article>
           </li>
           <li class="timeline-item">
-            <span class="timeline-marker" aria-hidden="true">4</span>
+            <div class="experience-dates" aria-hidden="true"><span>Jun<br>2025</span><span>Oct<br>2021</span></div><span class="experience-range" aria-hidden="true"></span>
+            <span class="timeline-marker" aria-hidden="true">5</span>
             <article class="timeline-card">
               <div class="timeline-meta"><span class="timeline-date">OCT 2021 — JUN 2025</span></div>
             <h3>Examination Officer</h3>
@@ -601,10 +632,12 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
               result-related coordination, and academic reporting.
             </p>
           
+            <button type="button" class="experience-select" aria-label="Highlight Examination Officer dates"></button>
             </article>
           </li>
           <li class="timeline-item">
-            <span class="timeline-marker" aria-hidden="true">3</span>
+            <div class="experience-dates" aria-hidden="true"><span>Oct<br>2021</span><span>May<br>2021</span></div><span class="experience-range" aria-hidden="true"></span>
+            <span class="timeline-marker" aria-hidden="true">4</span>
             <article class="timeline-card">
               <div class="timeline-meta"><span class="timeline-date">MAY 2021 — OCT 2021</span></div>
             <h3>Academic Manager</h3>
@@ -614,9 +647,22 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
               and support for day-to-day institutional operations.
             </p>
           
+            <button type="button" class="experience-select" aria-label="Highlight Academic Manager dates"></button>
             </article>
           </li>
           <li class="timeline-item">
+            <div class="experience-dates" aria-hidden="true"><span>Aug<br>2021</span><span>Jul<br>2018</span></div><span class="experience-range" aria-hidden="true"></span>
+            <span class="timeline-marker" aria-hidden="true">3</span>
+            <article class="timeline-card">
+              <div class="timeline-meta"><span class="timeline-date">JUL 2018 — AUG 2021</span></div>
+              <h3>Teacher | Discipline In-charge | Examination Director</h3>
+              <p class="organization">Hillside Sample Academy · Diktel, Khotang</p>
+              <p>Led examination administration, student discipline processes and classroom teaching.</p>
+              <button type="button" class="experience-select" aria-label="Highlight Hillside Sample Academy dates"></button>
+            </article>
+          </li>
+          <li class="timeline-item">
+            <div class="experience-dates" aria-hidden="true"><span>2018</span><span>2013</span></div><span class="experience-range" aria-hidden="true"></span>
             <span class="timeline-marker" aria-hidden="true">2</span>
             <article class="timeline-card">
               <div class="timeline-meta"><span class="timeline-date">2013 — 2018</span></div>
@@ -627,9 +673,11 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
               academic responsibilities with school administration.
             </p>
           
+            <button type="button" class="experience-select" aria-label="Highlight Founder, Principal &amp; Teacher dates"></button>
             </article>
           </li>
           <li class="timeline-item">
+            <div class="experience-dates" aria-hidden="true"><span>2013</span><span>2012</span></div><span class="experience-range" aria-hidden="true"></span>
             <span class="timeline-marker" aria-hidden="true">1</span>
             <article class="timeline-card">
               <div class="timeline-meta"><span class="timeline-date">2012 — 2013</span></div>
@@ -640,6 +688,7 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
               of my professional journey in education.
             </p>
           
+            <button type="button" class="experience-select" aria-label="Highlight Teacher dates"></button>
             </article>
           </li>
         </ol>
@@ -1028,6 +1077,30 @@ draw();if(root.isConnected)requestAnimationFrame(frame)}
 mark(0);draw();new ResizeObserver(draw).observe(clock);requestAnimationFrame(frame);
 })();
 
+</script>
+<script>
+// Highlight only the inspected role; return to the current role when idle.
+(()=>{
+ const root=document.getElementById('experience');
+ const entries=[...root.querySelectorAll('.timeline-item')];
+ const current=root.querySelector('.is-current');
+ let hovered=null,focused=null,touched=null,timer=null;
+ const update=()=>entries.forEach(entry=>entry.classList.toggle('is-highlighted',entry===(touched||hovered||focused||current)));
+ entries.forEach(entry=>{
+  const card=entry.querySelector('.timeline-card');
+  const button=entry.querySelector('.experience-select');
+  card.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'){hovered=entry;update();}});
+  card.addEventListener('pointerleave',event=>{if(event.pointerType==='mouse'){hovered=null;update();}});
+  button.addEventListener('focus',()=>{if(button.matches(':focus-visible')){focused=entry;update();}});
+  button.addEventListener('blur',()=>{focused=null;update();});
+  button.addEventListener('pointerdown',event=>{if(event.pointerType!=='mouse'){clearTimeout(timer);touched=entry;update();}});
+  button.addEventListener('pointerup',()=>{if(touched===entry){clearTimeout(timer);timer=setTimeout(()=>{touched=null;update();},4000);}});
+  button.addEventListener('pointercancel',()=>{clearTimeout(timer);touched=null;update();});
+  button.addEventListener('keydown',event=>{if(event.key==='Escape'){button.blur();clearTimeout(timer);hovered=focused=touched=null;update();}});
+ });
+ document.addEventListener('pointerdown',event=>{if(!event.target.closest('#experience .timeline-card')){clearTimeout(timer);touched=focused=null;update();}});
+ update();
+})();
 </script>
 </body>
 </html>
