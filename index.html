@@ -361,7 +361,10 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
 #expertise .section-head .section-intro { color:#bbc8cb; max-width:740px; font-size:clamp(15px,1.75vw,21px); line-height:1.5; }
 #mb-expertise-overlap { color:#edf2f2; }
 #mb-expertise-overlap * { box-sizing:border-box; }
-#mb-expertise-overlap .ep-stage {position:relative;height:715px;margin-top:38px;isolation:isolate;}
+#mb-expertise-overlap .ep-stage {
+  position:relative;height:715px;margin-top:38px;isolation:isolate;
+  transition:height 1.05s cubic-bezier(.22,1,.36,1);
+}
 #mb-expertise-overlap .ep-card {
   --edge:rgba(140,201,209,.42); --halo:rgba(57,213,229,.21);
   position:absolute;display:flex;flex-direction:column;align-items:stretch;
@@ -371,9 +374,10 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
   color:#f4f7f8;padding:22px 21px;
   box-shadow:0 12px 30px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.09);
   backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px);
-  transition:left .72s cubic-bezier(.25,.85,.22,1),top .72s cubic-bezier(.25,.85,.22,1),
-    width .72s cubic-bezier(.25,.85,.22,1),height .72s cubic-bezier(.25,.85,.22,1),
-    transform .25s,box-shadow .25s,border-color .25s,padding .25s;
+  /* Geometry is animated together via Web Animations API for continuous movement. */
+  transition:transform .32s cubic-bezier(.22,1,.36,1),
+    box-shadow .45s ease,border-color .45s ease;
+  will-change:left,top,width,height;
 }
 #mb-expertise-overlap .ep-card::before {
   content:"";position:absolute;inset:0;z-index:-1;
@@ -417,13 +421,19 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
 }
 #mb-expertise-overlap .ep-icon svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 #mb-expertise-overlap .ep-num{font:400 clamp(9px,1.15vw,12px)/1.4 "Segoe UI",Arial,sans-serif;white-space:nowrap;letter-spacing:.025em;color:#c2d0d3;padding-top:16px}
-#mb-expertise-overlap .ep-name{display:block;font-size:clamp(16px,1.85vw,23px);font-weight:700;line-height:1.25;letter-spacing:-.035em;margin:0 0 15px;color:#f7f8f8}
-#mb-expertise-overlap .ep-description{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;line-clamp:4;overflow:hidden;font-size:clamp(12px,1.2vw,15px);line-height:1.56;color:#d4e0e3}
-#mb-expertise-overlap .ep-card.ep-active .ep-description{display:block;overflow:auto;flex:1;padding-right:5px;font-size:clamp(13px,1.27vw,15px);line-height:1.65}
+#mb-expertise-overlap .ep-name{display:block;font-size:clamp(16px,1.85vw,23px);font-weight:700;line-height:1.25;letter-spacing:-.035em;margin:0 0 15px;color:#f7f8f8;transition:font-size .55s ease,margin .55s ease}
+#mb-expertise-overlap .ep-description{
+  display:block;max-height:calc(1.56em * 4);overflow:hidden;
+  font-size:clamp(12px,1.2vw,15px);line-height:1.56;color:#d4e0e3;
+  transition:max-height 1.05s cubic-bezier(.22,1,.36,1),opacity .45s ease;
+}
+#mb-expertise-overlap .ep-card.ep-active .ep-description{
+  max-height:300px;flex:1;padding-right:5px;
+  font-size:clamp(13px,1.27vw,15px);line-height:1.65;
+}
+#mb-expertise-overlap .ep-card.ep-moving .ep-description{opacity:.82}
 #mb-expertise-overlap .ep-card.ep-active .ep-top{margin-bottom:16px}
 #mb-expertise-overlap .ep-card.ep-active .ep-name{font-size:clamp(20px,2.2vw,27px)}
-#mb-expertise-overlap .ep-hint{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:1px solid rgba(157,194,201,.2);padding-top:17px;color:#9fb7be;font-size:12px}
-#mb-expertise-overlap .ep-hint span:first-child::before{content:"✦";color:#70ded9;margin-right:9px}
 /* The toolkit sits immediately below the showcase, in a matching dark finish. */
 #expertise #mb-snap-dial .tk-surface {
   color-scheme:dark;
@@ -445,7 +455,7 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
   #mb-expertise-overlap .ep-description{font-size:13px;line-height:1.5}
   #mb-expertise-overlap .ep-card.ep-active .ep-description{font-size:13px}
 }
-@media(prefers-reduced-motion:reduce){#mb-expertise-overlap .ep-card{transition:none!important}}
+@media(prefers-reduced-motion:reduce){#mb-expertise-overlap .ep-card,#mb-expertise-overlap .ep-stage,#mb-expertise-overlap .ep-description,#mb-expertise-overlap .ep-name{transition:none!important}}
 @media print{
   #expertise{background:white;color:black}
   #expertise .section-head .section-title{color:black}
@@ -663,10 +673,6 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
             <span class="ep-name">Coordination &amp; Professional Development</span>
             <span class="ep-description">Strengthening institutional collaboration through effective communication and coordination with school leadership, academic heads, coordinators, teachers, and administrative teams. Facilitating academic meetings, stakeholder engagement, staff guidance, system orientation, and collaborative improvement initiatives to promote shared responsibilities and consistent academic practices.</span>
           </button>
-          </div>
-          <div class="ep-hint">
-            <span>Hover to illuminate · Click to bring a card forward</span>
-            <span id="ep-clock-note" role="status" aria-live="polite">Automatically resets after 8 seconds</span>
           </div>
         </div>
 
@@ -1202,75 +1208,154 @@ mark(0);draw();new ResizeObserver(draw).observe(clock);requestAnimationFrame(fra
 </script>
 
 <script>
-/* APPROVED EXPERTISE CARD INTERACTIONS — 8-second auto reset */
+/* Smooth expertise card rearrangement with the original eight-second reset. */
 (() => {
   const root = document.getElementById('mb-expertise-overlap');
   if (!root || root.dataset.ready) return;
-  root.dataset.ready='1';
-  const stage=root.querySelector('.ep-stage');
-  const cards=[...root.querySelectorAll('.ep-card')];
-  const status=root.querySelector('#ep-clock-note');
-  let selected=-1, resetTimer=null;
-  const isMobile=()=>stage.clientWidth<=700;
-  function setPosition(card,x,y,w,h,z){
-    card.style.left=x+'px';card.style.top=y+'px';card.style.width=w+'px';
-    card.style.height=h+'px';card.style.zIndex=String(z);
+  root.dataset.ready = '1';
+  const stage = root.querySelector('.ep-stage');
+  const cards = [...root.querySelectorAll('.ep-card')];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const motions = new Map();
+  let selected = -1;
+  let resetTimer = null;
+  const isMobile = () => stage.clientWidth <= 700;
+  const easing = 'cubic-bezier(0.22,1,0.36,1)';
+
+  function setPosition(card, x, y, width, height, depth) {
+    card.style.left = x + 'px';
+    card.style.top = y + 'px';
+    card.style.width = width + 'px';
+    card.style.height = height + 'px';
+    card.style.zIndex = String(depth);
   }
-  function arrange(){
-    const width=stage.clientWidth,small=isMobile();
-    const cardWidth=small?Math.max(200,width*.92):width*.315;
-    const cardHeight=small?242:284;
-    if(selected<0){
-      if(small){
-        const ys=[0,192,384,576,768,960],xs=[0,width*.07,width*.02,width*.07,width*.02,width*.04];
-        cards.forEach((card,i)=>setPosition(card,xs[i],ys[i],cardWidth,cardHeight,6-i));
-        stage.style.height='1240px';
+
+  function applyLayout() {
+    const w = stage.clientWidth;
+    const small = isMobile();
+    const cardWidth = small ? Math.max(200, w * .92) : w * .315;
+    const cardHeight = small ? 242 : 284;
+
+    if (selected < 0) {
+      if (small) {
+        const ys = [0,192,384,576,768,960];
+        const xs = [0,w*.07,w*.02,w*.07,w*.02,w*.04];
+        cards.forEach((card,i) => setPosition(card,xs[i],ys[i],cardWidth,cardHeight,6-i));
+        stage.style.height = '1240px';
       } else {
-        const xs=[0,width*.342,width*.684,width*.17,width*.512,width*.342];
-        const ys=[0,0,0,185,185,407];
-        cards.forEach((card,i)=>setPosition(card,xs[i],ys[i],cardWidth,cardHeight,i<3?6:i<5?4:2));
-        stage.style.height='715px';
+        const xs = [0,w*.342,w*.684,w*.17,w*.512,w*.342];
+        const ys = [0,0,0,185,185,407];
+        cards.forEach((card,i) => setPosition(card,xs[i],ys[i],cardWidth,cardHeight,i<3?6:i<5?4:2));
+        stage.style.height = '715px';
       }
     } else {
-      const others=cards.map((_,i)=>i).filter(i=>i!==selected);
-      if(small){
-        const spotlightHeight=Math.max(430,Math.min(500,width*1.35));
-        setPosition(cards[selected],width*.015,0,width*.97,spotlightHeight,30);
-        const y0=spotlightHeight-92;
-        others.forEach((i,k)=>setPosition(cards[i],k%2?width*.065:width*.01,y0+k*196,cardWidth,cardHeight,7-k));
-        stage.style.height=(y0+others.length*196+cardHeight)+'px';
+      const others = cards.map((_,i) => i).filter(i => i !== selected);
+      if (small) {
+        const spotlightHeight = Math.max(430,Math.min(500,w*1.35));
+        setPosition(cards[selected],w*.015,0,w*.97,spotlightHeight,30);
+        const y0 = spotlightHeight-92;
+        others.forEach((i,k) => setPosition(cards[i],k%2?w*.065:w*.01,y0+k*196,cardWidth,cardHeight,7-k));
+        stage.style.height = (y0+others.length*196+cardHeight)+'px';
       } else {
-        setPosition(cards[selected],width*.19,0,width*.62,365,30);
-        const xs=[0,width*.342,width*.684,width*.17,width*.512],ys=[266,266,266,478,478];
-        others.forEach((i,k)=>setPosition(cards[i],xs[k],ys[k],cardWidth,cardHeight,k<3?7:4));
-        stage.style.height='792px';
+        setPosition(cards[selected],w*.19,0,w*.62,365,30);
+        const xs = [0,w*.342,w*.684,w*.17,w*.512];
+        const ys = [266,266,266,478,478];
+        others.forEach((i,k) => setPosition(cards[i],xs[k],ys[k],cardWidth,cardHeight,k<3?7:4));
+        stage.style.height = '792px';
       }
     }
-    cards.forEach((card,i)=>{
-      card.classList.toggle('ep-active',selected===i);
-      card.setAttribute('aria-pressed',String(selected===i));
+    cards.forEach((card,i) => {
+      card.classList.toggle('ep-active',selected === i);
+      card.setAttribute('aria-pressed',String(selected === i));
     });
   }
-  function reset(){
-    if(resetTimer){clearTimeout(resetTimer);resetTimer=null;}
-    selected=-1;arrange();status.textContent='Automatically resets after 8 seconds';
-  }
-  cards.forEach((card,i)=>{
-    card.addEventListener('click',()=>{
-      if(resetTimer){clearTimeout(resetTimer);resetTimer=null;}
-      if(selected===i){reset();return;}
-      selected=i;arrange();status.textContent='Spotlight active · 8-second reset';
-      resetTimer=setTimeout(reset,8000);
+
+  // Animate the four geometric coordinates together, including transitions
+  // interrupted by another click, without snapping the cards into place.
+  function arrange(animate = false) {
+    const canAnimate = animate && !reduce.matches && typeof cards[0].animate === 'function';
+    const before = canAnimate ? cards.map(card => {
+      const style = getComputedStyle(card);
+      return {left:style.left,top:style.top,width:style.width,height:style.height};
+    }) : [];
+
+    motions.forEach(motion => motion.cancel());
+    motions.clear();
+    cards.forEach(card => card.classList.remove('ep-moving'));
+    applyLayout();
+
+    if (!canAnimate) return;
+    cards.forEach((card,i) => {
+      const previous = before[i];
+      const current = {
+        left:card.style.left,top:card.style.top,
+        width:card.style.width,height:card.style.height
+      };
+      const changed = Object.keys(current).some(key =>
+        Math.abs(parseFloat(previous[key])-parseFloat(current[key])) > .5
+      );
+      if (!changed) return;
+      card.classList.add('ep-moving');
+      const motion = card.animate([previous,current], {
+        duration:1080,
+        easing,
+        fill:'none'
+      });
+      motions.set(card,motion);
+      motion.finished.then(() => {
+        if (motions.get(card) !== motion) return;
+        motions.delete(card);
+        card.classList.remove('ep-moving');
+      }).catch(() => {});
     });
-    card.addEventListener('pointermove',event=>{
-      const rect=card.getBoundingClientRect();
+  }
+
+  function reset() {
+    clearTimeout(resetTimer);
+    resetTimer = null;
+    selected = -1;
+    arrange(true);
+  }
+
+  cards.forEach((card,i) => {
+    card.addEventListener('click', () => {
+      clearTimeout(resetTimer);
+      resetTimer = null;
+      if (selected === i) { reset(); return; }
+      selected = i;
+      arrange(true);
+      resetTimer = setTimeout(reset,8000);
+    });
+    card.addEventListener('pointermove', event => {
+      const rect = card.getBoundingClientRect();
       card.style.setProperty('--px',((event.clientX-rect.left)/rect.width*100)+'%');
       card.style.setProperty('--py',((event.clientY-rect.top)/rect.height*100)+'%');
     });
   });
-  if(typeof ResizeObserver!=='undefined')new ResizeObserver(arrange).observe(stage.parentElement);
-  window.addEventListener('resize',arrange);
-  arrange();
+
+  // The showcase height animates on selection. Observe WIDTH only: reacting
+  // to a height change would cancel the card animations partway through.
+  let observedWidth = stage.clientWidth;
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(() => {
+      const width = stage.clientWidth;
+      if (Math.abs(width-observedWidth) < .5) return;
+      observedWidth = width;
+      arrange(false);
+    }).observe(stage.parentElement);
+  } else {
+    window.addEventListener('resize',() => {
+      const width = stage.clientWidth;
+      if (Math.abs(width-observedWidth) < .5) return;
+      observedWidth = width;
+      arrange(false);
+    });
+  }
+  // Set the first layout instantly so mobile pages do not animate on load.
+  stage.style.transition = 'none';
+  arrange(false);
+  void stage.offsetHeight;
+  stage.style.transition = '';
 })();
 </script>
 </body>
