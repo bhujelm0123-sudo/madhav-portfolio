@@ -268,7 +268,7 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
 #mb-snap-dial .tk-ticks{position:absolute;inset:1%;border-radius:50%;background:repeating-conic-gradient(var(--tk-line) 0deg 1deg,transparent 1deg 6deg);mask:radial-gradient(circle,transparent 67%,black 68%,black 69%,transparent 70%);pointer-events:none}
 #mb-snap-dial .tk-hand{position:absolute;left:50%;top:50%;width:33%;height:1px;background:var(--tk-accent);opacity:.5;transform-origin:left center;pointer-events:none}
 #mb-snap-dial .tk-hub{position:absolute;inset:32%;border-radius:50%;border:1px solid var(--tk-line);background:var(--tk-card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:8px;pointer-events:none;box-shadow:0 0 24px color-mix(in srgb,var(--tk-accent) 10%,transparent)}
-#mb-snap-dial .tk-hub strong{font-size:13px;line-height:1.3;font-weight:500}
+#mb-snap-dial .tk-hub strong{display:block;width:100%;font-size:14px;line-height:1.4;font-weight:600;text-align:center}
 #mb-snap-dial .tk-hub small{font-size:11px;color:var(--tk-muted)}
 #mb-snap-dial .tk-node{position:absolute;left:50%;top:50%;width:50px;height:50px;padding:3px;border:1px solid var(--tk-line);border-radius:12px;background:var(--tk-card);color:var(--tk-text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:0 4px 10px color-mix(in srgb,var(--tk-text) 5%,transparent)}
 #mb-snap-dial .tk-node .tk-symbol{color:var(--tk-accent);font-size:15px;font-weight:600;line-height:1}
@@ -675,7 +675,9 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
  <header class="tk-header"><div><p class="tk-kicker">My working toolkit</p><h3 id="toolkit-title">Connected by purpose.</h3></div></header>
  <div class="tk-layout">
   <div class="tk-list" role="group" aria-label="Choose a toolkit"></div>
-  <div class="tk-dial-area"><div class="tk-clock" role="group" aria-label="Rotating toolkit selector"><div class="tk-ticks"></div><div class="tk-track"></div><div class="tk-track inner"></div><div class="tk-hand"></div><div class="tk-hub"><strong class="tk-center">Microsoft Excel</strong><small class="tk-count">01 / 12</small></div><div class="tk-nodes"></div></div>
+  <div class="tk-dial-area"><div class="tk-clock" role="group" aria-label="Rotating toolkit selector"><div class="tk-ticks"></div><div class="tk-track"></div><div class="tk-track inner"></div><div class="tk-hand"></div><div class="tk-hub">
+  <strong class="tk-center">Microsoft Excel</strong>
+</div><div class="tk-nodes"></div></div>
   </div>
  </div>
  <div class="tk-detail" aria-live="polite" aria-atomic="true"><span class="tk-category">Office & data</span><h3 class="tk-name">Microsoft Excel</h3><p class="tk-description">Organising records, analysing academic data, and preparing reports with spreadsheets.</p></div>
@@ -1151,7 +1153,7 @@ const fallback=["<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\
 function logo(i){const wrap=document.createElement('span');wrap.className='tk-logo tk-logo-'+i;if(logos[i]){const img=document.createElement('img');img.alt='';img.setAttribute('aria-hidden','true');img.addEventListener('error',()=>{wrap.innerHTML=fallback[i]},{once:true});img.src=logos[i];wrap.append(img)}else{wrap.innerHTML=fallback[i]}return wrap}
 function span(cls,text){const el=document.createElement('span');el.className=cls;el.textContent=text;return el}
 data.forEach((t,i)=>{const node=document.createElement('button');node.type='button';node.className='tk-node cursor-interaction';node.setAttribute('aria-label',t[0]);node.append(logo(i),span('tk-short',t[2]));node.addEventListener('click',()=>choose(i));q('.tk-nodes').append(node);nodes.push(node);const word=document.createElement('button');word.type='button';word.className='tk-word cursor-interaction';word.append(logo(i),span('tk-label',t[0]),span('tk-arrow','↗'));word.addEventListener('click',()=>choose(i));q('.tk-list').append(word);words.push(word)});
-function mark(i,detail=true){selected=i;nodes.forEach((n,j)=>n.setAttribute('aria-pressed',String(i===j)));words.forEach((n,j)=>n.setAttribute('aria-pressed',String(i===j)));q('.tk-center').textContent=data[i][0];q('.tk-count').textContent=String(i+1).padStart(2,'0')+' / '+String(data.length).padStart(2,'0');if(detail){q('.tk-category').textContent=data[i][3];q('.tk-name').textContent=data[i][0];q('.tk-description').textContent=data[i][4]}}
+function mark(i,detail=true){selected=i;nodes.forEach((n,j)=>n.setAttribute('aria-pressed',String(i===j)));words.forEach((n,j)=>n.setAttribute('aria-pressed',String(i===j)));q('.tk-center').textContent=data[i][0];if(detail){q('.tk-category').textContent=data[i][3];q('.tk-name').textContent=data[i][0];q('.tk-description').textContent=data[i][4]}}
 function choose(i){
  i=(i+data.length)%data.length;mark(i);
  const now=performance.now(),tau=2*Math.PI;
