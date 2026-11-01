@@ -346,114 +346,146 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
 </style>
 
 <style>
-/* ====================================================
-   APPROVED EXPERTISE OVERLAY — isolated to #expertise
-   The main site, experience timeline, etc. are untouched.
-   ==================================================== */
+/* ================================================================
+   THEME-AWARE EXPERTISE OVERLAP + TOOLKIT
+   Desktop: original 3-2-1 layered cards.
+   Mobile: auto-sized 3-2-1 layered cards; a tapped card expands to
+   readable full width. Scope remains limited to #expertise.
+   ================================================================ */
 #expertise {
-  background: radial-gradient(ellipse at 23% 22%,#22373d 0%,transparent 55%),
-              radial-gradient(ellipse at 80% 70%,#122930 0%,transparent 57%),#0c1a20;
-  color:#edf2f2;
+  color-scheme:light;
+  --ep-bg: #f6f8f7;
+  --ep-bg-glow-a:rgba(139,203,205,.21);
+  --ep-bg-glow-b:rgba(183,212,222,.19);
+  --ep-heading:#253a40;
+  --ep-kicker:#48666c;
+  --ep-intro:#546d72;
+  --ep-card-edge:rgba(82,143,151,.45);
+  --ep-card-halo:rgba(56,187,190,.16);
+  --ep-card-bg:linear-gradient(145deg,rgba(255,255,255,.93),rgba(229,244,244,.90) 58%,rgba(217,236,237,.88));
+  --ep-card-two:radial-gradient(ellipse at 23% 8%,rgba(194,164,229,.22),transparent 62%),radial-gradient(ellipse at 91% 18%,rgba(61,188,185,.21),transparent 47%),linear-gradient(135deg,#ffffff,#e1f2f1 75%);
+  --ep-card-active:radial-gradient(ellipse at 15% 4%,rgba(61,190,190,.19),transparent 65%),linear-gradient(140deg,#ffffff,#d9f1ee 80%);
+  --ep-card-ink:#243e43;
+  --ep-card-desc:#4c6369;
+  --ep-card-num:#526a70;
+  --ep-icon-ink:#136d79;
+  --ep-icon-bg:radial-gradient(circle,rgba(113,218,223,.37),rgba(205,240,241,.85) 70%);
+  --ep-icon-edge:rgba(51,163,173,.52);
+  --ep-icon-shadow:0 0 12px rgba(51,194,206,.22),0 0 30px rgba(51,174,191,.12),inset 0 0 18px rgba(74,193,200,.17);
+  --ep-card-shadow:0 12px 30px rgba(31,87,94,.10),inset 0 1px rgba(255,255,255,.76);
+  --ep-hover-edge:#23a79f;
+  --ep-hover-shadow:0 0 19px rgba(37,167,175,.23),0 23px 44px rgba(31,86,91,.20);
+  --ep-active-edge:#18998e;
+  --ep-active-shadow:0 0 0 1px rgba(37,170,162,.28),0 16px 65px rgba(56,180,184,.18),0 26px 52px rgba(24,84,88,.20);
+  --ep-spotlight:rgba(38,186,192,.18);
+  background:radial-gradient(ellipse at 23% 22%,var(--ep-bg-glow-a),transparent 55%),radial-gradient(ellipse at 80% 70%,var(--ep-bg-glow-b),transparent 57%),var(--ep-bg);
+  color:var(--ep-heading);
+  transition:background-color .3s ease,color .3s ease;
 }
-#expertise .section-head .eyebrow { color:#b7c4c7; }
-#expertise .section-head .eyebrow::before { background:#8ca6ac; }
-#expertise .section-head .section-title { color:#f2f5f5; font-size:clamp(36px,5.4vw,68px); }
-#expertise .section-head .section-intro { color:#bbc8cb; max-width:740px; font-size:clamp(15px,1.75vw,21px); line-height:1.5; }
-#mb-expertise-overlap { color:#edf2f2; }
-#mb-expertise-overlap * { box-sizing:border-box; }
-#mb-expertise-overlap .ep-stage {
-  position:relative;height:715px;margin-top:38px;isolation:isolate;
-  transition:height 1.05s cubic-bezier(.22,1,.36,1);
+:root[data-theme="dark"] #expertise {
+  color-scheme:dark;
+  --ep-bg:#0c1a20;
+  --ep-bg-glow-a:#22373d;
+  --ep-bg-glow-b:#122930;
+  --ep-heading:#f2f5f5;
+  --ep-kicker:#b7c4c7;
+  --ep-intro:#bbc8cb;
+  --ep-card-edge:rgba(140,201,209,.42);
+  --ep-card-halo:rgba(57,213,229,.21);
+  --ep-card-bg:linear-gradient(145deg,rgba(74,103,113,.35),rgba(22,39,49,.91) 55%,rgba(29,49,58,.85));
+  --ep-card-two:radial-gradient(ellipse at 23% 8%,rgba(165,113,187,.31),transparent 62%),radial-gradient(ellipse at 91% 18%,rgba(30,189,179,.36),transparent 47%),linear-gradient(135deg,#30414e,#1b303b 75%);
+  --ep-card-active:radial-gradient(ellipse at 15% 4%,rgba(61,213,215,.23),transparent 65%),linear-gradient(140deg,#28434c,#1a303a 76%);
+  --ep-card-ink:#f7f8f8;
+  --ep-card-desc:#d4e0e3;
+  --ep-card-num:#c2d0d3;
+  --ep-icon-ink:#b9f8ff;
+  --ep-icon-bg:radial-gradient(circle,rgba(74,234,241,.26),rgba(17,63,74,.7) 70%);
+  --ep-icon-edge:rgba(131,233,241,.55);
+  --ep-icon-shadow:0 0 12px rgba(67,222,235,.45),0 0 34px rgba(63,209,232,.25),inset 0 0 18px rgba(75,207,221,.16);
+  --ep-card-shadow:0 12px 30px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.09);
+  --ep-hover-edge:#88f5ed;
+  --ep-hover-shadow:0 0 19px rgba(79,222,224,.32),0 25px 52px rgba(0,0,0,.42);
+  --ep-active-edge:#8df1e9;
+  --ep-active-shadow:0 0 0 1px rgba(107,244,231,.33),0 16px 70px rgba(15,211,201,.22),0 30px 70px rgba(0,0,0,.48);
+  --ep-spotlight:rgba(79,235,232,.31);
 }
-#mb-expertise-overlap .ep-card {
-  --edge:rgba(140,201,209,.42); --halo:rgba(57,213,229,.21);
+#expertise .section-head .eyebrow{color:var(--ep-kicker)}
+#expertise .section-head .eyebrow::before{background:var(--ep-kicker)}
+#expertise .section-head .section-title{color:var(--ep-heading);font-size:clamp(36px,5.4vw,68px)}
+#expertise .section-head .section-intro{color:var(--ep-intro);max-width:740px;font-size:clamp(15px,1.75vw,21px);line-height:1.5}
+#mb-expertise-overlap{color:var(--ep-heading)}
+#mb-expertise-overlap *{box-sizing:border-box}
+#mb-expertise-overlap .ep-stage{position:relative;height:715px;margin-top:38px;isolation:isolate;transition:height 1.05s cubic-bezier(.22,1,.36,1)}
+#mb-expertise-overlap .ep-card{
+  --edge:var(--ep-card-edge);--halo:var(--ep-card-halo);
   position:absolute;display:flex;flex-direction:column;align-items:stretch;
   overflow:hidden;cursor:pointer;text-align:left;
   border:1px solid var(--edge);border-radius:16px;
-  background:linear-gradient(145deg,rgba(74,103,113,.35),rgba(22,39,49,.91) 55%,rgba(29,49,58,.85));
-  color:#f4f7f8;padding:22px 21px;
-  box-shadow:0 12px 30px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.09);
-  backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px);
-  /* Geometry is animated together via Web Animations API for continuous movement. */
-  transition:transform .32s cubic-bezier(.22,1,.36,1),
-    box-shadow .45s ease,border-color .45s ease;
+  background:var(--ep-card-bg);color:var(--ep-card-ink);padding:22px 21px;
+  box-shadow:var(--ep-card-shadow);backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px);
+  transition:transform .32s cubic-bezier(.22,1,.36,1),box-shadow .45s ease,border-color .45s ease,background-color .3s ease,color .3s ease;
   will-change:left,top,width,height;
 }
-#mb-expertise-overlap .ep-card::before {
-  content:"";position:absolute;inset:0;z-index:-1;
-  background:radial-gradient(ellipse at 24% 0%,var(--halo),transparent 59%);pointer-events:none;
-}
-#mb-expertise-overlap .ep-card::after {
-  content:"";position:absolute;inset:0;z-index:-1;opacity:0;
-  background:radial-gradient(230px circle at var(--px,25%) var(--py,30%),rgba(79,235,232,.31),transparent 80%);
-  transition:opacity .24s;pointer-events:none;
-}
-#mb-expertise-overlap .ep-card:nth-child(2) {
-  --edge:rgba(204,166,228,.56);--halo:rgba(173,101,221,.29);
-  background:radial-gradient(ellipse at 23% 8%,rgba(165,113,187,.31),transparent 62%),
-             radial-gradient(ellipse at 91% 18%,rgba(30,189,179,.36),transparent 47%),
-             linear-gradient(135deg,#30414e,#1b303b 75%);
-}
-#mb-expertise-overlap .ep-card:nth-child(4){--halo:rgba(75,208,240,.28)}
-#mb-expertise-overlap .ep-card:nth-child(5){--halo:rgba(24,191,169,.24)}
-#mb-expertise-overlap .ep-card:not(.ep-active):hover {
-  z-index:17!important;transform:translateY(-8px);border-color:#88f5ed;
-  box-shadow:0 0 19px rgba(79,222,224,.32),0 25px 52px rgba(0,0,0,.42);
-}
+#mb-expertise-overlap .ep-card::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 24% 0%,var(--halo),transparent 59%);pointer-events:none}
+#mb-expertise-overlap .ep-card::after{content:"";position:absolute;inset:0;z-index:-1;opacity:0;background:radial-gradient(230px circle at var(--px,25%) var(--py,30%),var(--ep-spotlight),transparent 80%);transition:opacity .24s;pointer-events:none}
+#mb-expertise-overlap .ep-card:nth-child(2){--edge:rgba(176,137,204,.56);--halo:rgba(173,101,221,.20);background:var(--ep-card-two)}
+:root[data-theme="dark"] #mb-expertise-overlap .ep-card:nth-child(2){--edge:rgba(204,166,228,.56);--halo:rgba(173,101,221,.29)}
+#mb-expertise-overlap .ep-card:nth-child(4){--halo:rgba(75,208,240,.21)}
+#mb-expertise-overlap .ep-card:nth-child(5){--halo:rgba(24,191,169,.21)}
+@media(hover:hover){#mb-expertise-overlap .ep-card:not(.ep-active):hover{z-index:17!important;transform:translateY(-8px);border-color:var(--ep-hover-edge);box-shadow:var(--ep-hover-shadow)}}
 #mb-expertise-overlap .ep-card:hover::after,#mb-expertise-overlap .ep-card.ep-active::after{opacity:1}
-#mb-expertise-overlap .ep-card:focus-visible{outline:2px solid #73eee3;outline-offset:3px}
-#mb-expertise-overlap .ep-card.ep-active{
-  z-index:30!important;border-color:#8df1e9;
-  background:radial-gradient(ellipse at 15% 4%,rgba(61,213,215,.23),transparent 65%),linear-gradient(140deg,#28434c,#1a303a 76%);
-  box-shadow:0 0 0 1px rgba(107,244,231,.33),0 16px 70px rgba(15,211,201,.22),0 30px 70px rgba(0,0,0,.48);
-}
+#mb-expertise-overlap .ep-card:focus-visible{outline:2px solid var(--ep-hover-edge);outline-offset:3px}
+#mb-expertise-overlap .ep-card.ep-active{z-index:30!important;border-color:var(--ep-active-edge);background:var(--ep-card-active);box-shadow:var(--ep-active-shadow)}
 #mb-expertise-overlap .ep-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-height:65px;margin-bottom:22px}
-#mb-expertise-overlap .ep-icon{
-  width:62px;height:62px;flex:0 0 62px;border:1px solid rgba(131,233,241,.55);border-radius:14px;
-  background:radial-gradient(circle,rgba(74,234,241,.26),rgba(17,63,74,.7) 70%);
-  display:grid;place-items:center;color:#b9f8ff;
-  box-shadow:0 0 12px rgba(67,222,235,.45),0 0 34px rgba(63,209,232,.25),inset 0 0 18px rgba(75,207,221,.16);
-}
-#mb-expertise-overlap .ep-card:nth-child(2) .ep-icon{
-  color:#f0dfff;border-color:rgba(221,169,250,.5);
-  background:radial-gradient(circle,rgba(198,121,227,.28),rgba(53,43,77,.84));
-  box-shadow:0 0 23px rgba(204,122,231,.48);
-}
+#mb-expertise-overlap .ep-icon{width:62px;height:62px;flex:0 0 62px;border:1px solid var(--ep-icon-edge);border-radius:14px;background:var(--ep-icon-bg);display:grid;place-items:center;color:var(--ep-icon-ink);box-shadow:var(--ep-icon-shadow)}
+#mb-expertise-overlap .ep-card:nth-child(2) .ep-icon{color:#735494;border-color:rgba(158,111,189,.46);background:radial-gradient(circle,rgba(198,121,227,.24),rgba(242,226,249,.85));box-shadow:0 0 23px rgba(179,116,204,.23)}
+:root[data-theme="dark"] #mb-expertise-overlap .ep-card:nth-child(2) .ep-icon{color:#f0dfff;border-color:rgba(221,169,250,.5);background:radial-gradient(circle,rgba(198,121,227,.28),rgba(53,43,77,.84));box-shadow:0 0 23px rgba(204,122,231,.48)}
 #mb-expertise-overlap .ep-icon svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-#mb-expertise-overlap .ep-num{font:400 clamp(9px,1.15vw,12px)/1.4 "Segoe UI",Arial,sans-serif;white-space:nowrap;letter-spacing:.025em;color:#c2d0d3;padding-top:16px}
-#mb-expertise-overlap .ep-name{display:block;font-size:clamp(16px,1.85vw,23px);font-weight:700;line-height:1.25;letter-spacing:-.035em;margin:0 0 15px;color:#f7f8f8;transition:font-size .55s ease,margin .55s ease}
-#mb-expertise-overlap .ep-description{
-  display:block;max-height:calc(1.56em * 4);overflow:hidden;
-  font-size:clamp(12px,1.2vw,15px);line-height:1.56;color:#d4e0e3;
-  transition:max-height 1.05s cubic-bezier(.22,1,.36,1),opacity .45s ease;
-}
-#mb-expertise-overlap .ep-card.ep-active .ep-description{
-  max-height:300px;flex:1;padding-right:5px;
-  font-size:clamp(13px,1.27vw,15px);line-height:1.65;
-}
+#mb-expertise-overlap .ep-num{font:400 clamp(9px,1.15vw,12px)/1.4 "Segoe UI",Arial,sans-serif;white-space:nowrap;letter-spacing:.025em;color:var(--ep-card-num);padding-top:16px}
+#mb-expertise-overlap .ep-name{display:block;font-size:clamp(16px,1.85vw,23px);font-weight:700;line-height:1.25;letter-spacing:-.035em;margin:0 0 15px;color:var(--ep-card-ink);transition:font-size .55s ease,margin .55s ease}
+#mb-expertise-overlap .ep-description{display:block;max-height:calc(1.56em * 4);overflow:hidden;font-size:clamp(12px,1.2vw,15px);line-height:1.56;color:var(--ep-card-desc);transition:max-height 1.05s cubic-bezier(.22,1,.36,1),opacity .45s ease}
+#mb-expertise-overlap .ep-card.ep-active .ep-description{max-height:330px;flex:1;padding-right:5px;font-size:clamp(13px,1.27vw,15px);line-height:1.65;overflow-y:auto}
 #mb-expertise-overlap .ep-card.ep-moving .ep-description{opacity:.82}
 #mb-expertise-overlap .ep-card.ep-active .ep-top{margin-bottom:16px}
 #mb-expertise-overlap .ep-card.ep-active .ep-name{font-size:clamp(20px,2.2vw,27px)}
-/* The toolkit sits immediately below the showcase, in a matching dark finish. */
-#expertise #mb-snap-dial .tk-surface {
+/* Working toolkit uses the same current site theme, not a forced dark surface. */
+#expertise #mb-snap-dial .tk-surface{
+  color-scheme:light;
+  --tk-bg:#ffffff;--tk-card:#f6faf9;--tk-text:#263e44;--tk-muted:#587077;
+  --tk-line:#c9dbd9;--tk-accent:#16776d;--tk-soft:#e3f2ee;
+  background:var(--tk-bg);border-color:var(--tk-line);
+  transition:background-color .3s ease,border-color .3s ease,color .3s ease;
+}
+:root[data-theme="dark"] #expertise #mb-snap-dial .tk-surface{
   color-scheme:dark;
   --tk-bg:#11272d;--tk-card:#192f38;--tk-text:#e8f4f3;--tk-muted:#aec3c3;
   --tk-line:#34515a;--tk-accent:#58e0cd;--tk-soft:#15373a;
 }
-#expertise #mb-snap-dial .tk-surface strong,
-#expertise #mb-snap-dial .tk-surface h3 {color:var(--tk-text)}
-#expertise #mb-snap-dial .tk-surface{background:var(--tk-bg);border-color:var(--tk-line)}
+#expertise #mb-snap-dial .tk-surface strong,#expertise #mb-snap-dial .tk-surface h3{color:var(--tk-text)}
 #expertise #mb-snap-dial .tk-logo-11 svg{color:#dc723d}
 @media(max-width:700px){
-  #mb-expertise-overlap .ep-stage{margin-top:28px}
-  #mb-expertise-overlap .ep-card{padding:18px}
-  #mb-expertise-overlap .ep-icon{width:49px;height:49px;flex-basis:49px;border-radius:12px}
-  #mb-expertise-overlap .ep-icon svg{width:26px;height:26px}
-  #mb-expertise-overlap .ep-top{min-height:52px;margin-bottom:12px}
-  #mb-expertise-overlap .ep-num{font-size:10px;padding-top:12px}
-  #mb-expertise-overlap .ep-name{font-size:19px;margin-bottom:10px}
-  #mb-expertise-overlap .ep-description{font-size:13px;line-height:1.5}
-  #mb-expertise-overlap .ep-card.ep-active .ep-description{font-size:13px}
+  #mb-expertise-overlap .ep-stage{margin-top:26px}
+  /* Previews are auto-sized to the viewport without losing the 3-2-1 overlap. */
+  #mb-expertise-overlap .ep-card{padding:10px 9px;border-radius:11px}
+  #mb-expertise-overlap .ep-icon{width:32px;height:32px;flex:0 0 32px;border-radius:9px}
+  #mb-expertise-overlap .ep-icon svg{width:21px;height:21px}
+  #mb-expertise-overlap .ep-top{flex-direction:column;gap:6px;align-items:flex-start;min-height:0;margin-bottom:9px}
+  #mb-expertise-overlap .ep-num{font-size:9px;padding-top:0;white-space:normal;line-height:1.3;letter-spacing:0}
+  #mb-expertise-overlap .ep-name{font-size:clamp(11px,2.9vw,16px);line-height:1.22;letter-spacing:-.03em;margin:0 0 8px;overflow-wrap:anywhere}
+  #mb-expertise-overlap .ep-description{font-size:10px;line-height:1.4;max-height:calc(1.4em * 3);overflow:hidden}
+  #mb-expertise-overlap .ep-card.ep-active{padding:19px 18px;border-radius:15px}
+  #mb-expertise-overlap .ep-card.ep-active .ep-top{flex-direction:row;justify-content:space-between;align-items:flex-start;min-height:50px;gap:10px;margin-bottom:14px}
+  #mb-expertise-overlap .ep-card.ep-active .ep-num{font-size:11px;white-space:nowrap;padding-top:15px}
+  #mb-expertise-overlap .ep-card.ep-active .ep-icon{width:50px;height:50px;flex-basis:50px;border-radius:12px}
+  #mb-expertise-overlap .ep-card.ep-active .ep-icon svg{width:28px;height:28px}
+  #mb-expertise-overlap .ep-card.ep-active .ep-name{font-size:clamp(19px,5vw,25px);line-height:1.22;margin-bottom:12px}
+  #mb-expertise-overlap .ep-card.ep-active .ep-description{font-size:clamp(12px,3.15vw,14px);line-height:1.6;max-height:none;overflow-y:auto}
+}
+@media(max-width:350px){
+  #mb-expertise-overlap .ep-card{padding:8px 7px}
+  #mb-expertise-overlap .ep-num{font-size:8px}
+  #mb-expertise-overlap .ep-name{font-size:10px}
+  #mb-expertise-overlap .ep-description{font-size:9px}
 }
 @media(prefers-reduced-motion:reduce){#mb-expertise-overlap .ep-card,#mb-expertise-overlap .ep-stage,#mb-expertise-overlap .ep-description,#mb-expertise-overlap .ep-name{transition:none!important}}
 @media print{
@@ -461,7 +493,7 @@ footer {padding:28px 0;border-top:1px solid var(--line)}
   #expertise .section-head .section-title{color:black}
   #mb-expertise-overlap .ep-stage{height:auto!important;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
   #mb-expertise-overlap .ep-card{position:static!important;width:100%!important;height:auto!important;min-height:200px!important;background:white!important;color:black!important;box-shadow:none!important;border-color:#bbb!important;break-inside:avoid}
-  #mb-expertise-overlap .ep-description{-webkit-line-clamp:unset;line-clamp:unset;display:block!important;color:black!important}
+  #mb-expertise-overlap .ep-description{max-height:none!important;display:block!important;color:black!important}
   #mb-expertise-overlap .ep-name,#mb-expertise-overlap .ep-num{color:black!important}
 }
 </style>
@@ -1233,34 +1265,35 @@ mark(0);draw();new ResizeObserver(draw).observe(clock);requestAnimationFrame(fra
   function applyLayout() {
     const w = stage.clientWidth;
     const small = isMobile();
-    const cardWidth = small ? Math.max(200, w * .92) : w * .315;
-    const cardHeight = small ? 242 : 284;
+    // Preserve the 3-2-1 staggered visual on every viewport.  Narrow
+    // screens get proportionally smaller previews and a full-width
+    // expanded reading panel when a card is selected.
+    const cardWidth = w * .315;
+    const cardHeight = small ? Math.max(203, w * .51) : 284;
+    const midY = small ? Math.max(139, w * .405) : 185;
+    const bottomY = small ? midY * 2 : 407;
+    const xs = [0,w*.342,w*.684,w*.17,w*.512,w*.342];
+    const ys = [0,0,0,midY,midY,bottomY];
 
     if (selected < 0) {
-      if (small) {
-        const ys = [0,192,384,576,768,960];
-        const xs = [0,w*.07,w*.02,w*.07,w*.02,w*.04];
-        cards.forEach((card,i) => setPosition(card,xs[i],ys[i],cardWidth,cardHeight,6-i));
-        stage.style.height = '1240px';
-      } else {
-        const xs = [0,w*.342,w*.684,w*.17,w*.512,w*.342];
-        const ys = [0,0,0,185,185,407];
-        cards.forEach((card,i) => setPosition(card,xs[i],ys[i],cardWidth,cardHeight,i<3?6:i<5?4:2));
-        stage.style.height = '715px';
-      }
+      cards.forEach((card,i) => setPosition(card,xs[i],ys[i],cardWidth,cardHeight,i<3?6:i<5?4:2));
+      stage.style.height = (small ? bottomY+cardHeight+14 : 715)+'px';
     } else {
       const others = cards.map((_,i) => i).filter(i => i !== selected);
       if (small) {
-        const spotlightHeight = Math.max(430,Math.min(500,w*1.35));
-        setPosition(cards[selected],w*.015,0,w*.97,spotlightHeight,30);
-        const y0 = spotlightHeight-92;
-        others.forEach((i,k) => setPosition(cards[i],k%2?w*.065:w*.01,y0+k*196,cardWidth,cardHeight,7-k));
-        stage.style.height = (y0+others.length*196+cardHeight)+'px';
+        const spotlightHeight = w < 380 ? 475 : w < 520 ? 445 : 405;
+        setPosition(cards[selected],w*.012,0,w*.976,spotlightHeight,30);
+        const startY = spotlightHeight-55;
+        const secondRowY = startY+midY;
+        const smallXs = [0,w*.342,w*.684,w*.17,w*.512];
+        const smallYs = [startY,startY,startY,secondRowY,secondRowY];
+        others.forEach((i,k) => setPosition(cards[i],smallXs[k],smallYs[k],cardWidth,cardHeight,k<3?7:4));
+        stage.style.height = (secondRowY+cardHeight+14)+'px';
       } else {
         setPosition(cards[selected],w*.19,0,w*.62,365,30);
-        const xs = [0,w*.342,w*.684,w*.17,w*.512];
-        const ys = [266,266,266,478,478];
-        others.forEach((i,k) => setPosition(cards[i],xs[k],ys[k],cardWidth,cardHeight,k<3?7:4));
+        const otherXs = [0,w*.342,w*.684,w*.17,w*.512];
+        const otherYs = [266,266,266,478,478];
+        others.forEach((i,k) => setPosition(cards[i],otherXs[k],otherYs[k],cardWidth,cardHeight,k<3?7:4));
         stage.style.height = '792px';
       }
     }
